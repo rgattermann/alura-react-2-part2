@@ -1,8 +1,14 @@
 import React, {Component} from "react";
+import FormValidator from "./FormValidator";
 
 class Form extends Component {
   constructor(props) {
     super(props);
+
+    this.validator = new FormValidator({
+      fieldName: "name",
+      validationMethod: "isEmpty"
+    });
 
     this.initialState = {
         name: "",
@@ -14,8 +20,12 @@ class Form extends Component {
   }
 
   onSubmit = () => {
-    this.props.handleSubmit(this.state);
-    this.setState(this.initialState);
+    if (this.validator.validate(this.state)) {
+      this.props.handleSubmit(this.state);
+      this.setState(this.initialState);
+    } else {
+      console.log("submit blocked");
+    }
   };
 
   handleChange = event => {
