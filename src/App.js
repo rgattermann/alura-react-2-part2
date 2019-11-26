@@ -4,6 +4,7 @@ import "./App.css";
 import Table from "./Table";
 import Form from "./Form";
 import Header from "./Header";
+import PopUp from "./PopUp";
 
 class App extends Component{
   state = {
@@ -35,10 +36,13 @@ class App extends Component{
     this.setState({
       authors: authors.filter((author, authorIndex) => authorIndex !== index)
     });
+
+    PopUp.showMessage("success", "Autor removido com sucesso!");
   }
 
   handleSubmit = author => {
     this.setState({authors: [...this.state.authors, author]});
+    PopUp.showMessage("success", "Autor adicionado com sucesso!");
   };
 
   render() {

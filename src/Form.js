@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import FormValidator from "./FormValidator";
+import PopUp from "./PopUp";
 
 class Form extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class Form extends Component {
 
       const invalidFields = fields.filter(elm => elm.isInvalid);
 
-      invalidFields.forEach(field => console.log(field.message));
+      invalidFields.forEach(field => PopUp.showMessage("error", field.message));
     }
   };
 
