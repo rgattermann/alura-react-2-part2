@@ -6,13 +6,36 @@ class FormValidator {
   }
 
   validate(state) {
-    const fieldValue = state[this.rules.fieldName.toString()];
-    const validationMethod = validator[this.rules.validationMethod.toString()];
+    let validation = this.valid();
 
-    if (validationMethod(fieldValue, [], state)) {
-      console.log("invalid");
-      return false;
-    } else { console.log("valid"); return true;}
+    this.rules.forEach(rule => {
+      if (!validation[rule.fieldName].isInvalid) {
+        const fieldValue = state[rule.fieldName.toString()];
+        const args = rule.args || [];
+        const validationMethod = typeof rule.validationMethod === "string" ?
+          validator[rule.validationMethod] :
+          rule.validationMethod;
+
+        if (validationMethod(fieldValue, ...args, state) !== rule.validOn) {
+          validation[rule.fieldName] = {
+            isInvalid: true,
+            message: rule.message
+          };
+          validation.isValid = false;
+        }
+      }
+    });
+
+    return validation;
+  }
+
+  valid() {
+    const validation = {};
+    this.rules.map(rule => (
+      validation[rule.fieldName] = {isInvalid: false, message: ""}
+    ));
+
+    return {isValid: true, ...validation};
   }
 }
 

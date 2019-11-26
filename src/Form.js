@@ -5,26 +5,51 @@ class Form extends Component {
   constructor(props) {
     super(props);
 
-    this.validator = new FormValidator({
-      fieldName: "name",
-      validationMethod: "isEmpty"
-    });
+    this.validator = new FormValidator([
+      {
+        fieldName: "name",
+        validationMethod: "isEmpty",
+        validOn: false,
+        message: "Entre com um nome",
+      },
+      {
+        fieldName: "book",
+        validationMethod: "isEmpty",
+        validOn: false,
+        message: "Entre com um livro",
+      },
+      {
+        fieldName: "price",
+        validationMethod: "isInt",
+        args: [{min: 0, max: 99999}],
+        validOn: true,
+        message: "Entre com um valor númerico",
+      },
+    ]);
 
     this.initialState = {
         name: "",
         book: "",
         price: "",
+        validation: this.validator.valid()
     };
 
     this.state = this.initialState;
   }
 
   onSubmit = () => {
-    if (this.validator.validate(this.state)) {
+    const validation = this.validator.validate(this.state);
+
+    if (validation.isValid) {
       this.props.handleSubmit(this.state);
       this.setState(this.initialState);
     } else {
-      console.log("submit blocked");
+      const {name, book, price} = validation;
+      const fields = [name, book, price];
+
+      const invalidFields = fields.filter(elm => elm.isInvalid);
+
+      invalidFields.forEach(field => console.log(field.message));
     }
   };
 
