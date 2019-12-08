@@ -49,6 +49,7 @@ class App extends Component{
     return <React.Fragment>
       <Header />
       <div className="container mb-10">
+        <h1> Casa do código</h1>
         <Table
         authors={this.state.authors}
         removeAuthor={this.removeAuthor}/>
