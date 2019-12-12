@@ -20,10 +20,10 @@ app.get("/", (req, res, next) => {
 });
 
 
-//Lista todos os autores
-app.get("/api/autor", (req, res, next) => {
+//Lista todos os authores
+app.get("/api/author", (req, res, next) => {
 
-    var sql = "select * from autor"
+    var sql = "select * from author"
     var params = []
     db.all(sql, params, (err, rows) => {
         if (err) {
@@ -36,16 +36,16 @@ app.get("/api/autor", (req, res, next) => {
         })
     });
 });
-//Lista livros
-app.get("/api/autor/livro", (req, res, next) => {
-    var sql = "select * from autor"
+//Lista books
+app.get("/api/author/books", (req, res, next) => {
+    var sql = "select * from author"
     var params = []
     db.all(sql, params, (err, rows) => {
-        var resp = rows.map((autor) => {
+        var resp = rows.map((author) => {
 
         return {
-           livro: autor.livro,
-           id:autor.id
+           book: author.book,
+           id:author.id
             }
         }
     );
@@ -59,16 +59,16 @@ app.get("/api/autor/livro", (req, res, next) => {
         })
     });
 });
-//Lista nomes
-app.get("/api/autor/nome", (req, res, next) => {
-    var sql = "select * from autor"
+//Lista names
+app.get("/api/author/name", (req, res, next) => {
+    var sql = "select * from author"
     var params = []
     db.all(sql, params, (err, rows) => {
-        var resp = rows.map((autor) => {
+        var resp = rows.map((author) => {
 
             return {
-               nome: autor.nome,
-               id:autor.id
+               name: author.name,
+               id:author.id
                 }
             }
         );
@@ -83,9 +83,9 @@ app.get("/api/autor/nome", (req, res, next) => {
     });
 });
 
-//Retorna o autor específico para aquele id, caso contrário, retorna uma mensagem de erro
-app.get("/api/autor/:id", (req, res, next) => {
-    var sql = "select * from autor where id = ?";
+//Retorna o author específico para aquele id, caso contrário, retorna uma mensagem de erro
+app.get("/api/author/:id", (req, res, next) => {
+    var sql = "select * from author where id = ?";
     var params = [req.params.id];
     db.get(sql, params, (err, row) => {
         if (err) {
@@ -99,32 +99,32 @@ app.get("/api/autor/:id", (req, res, next) => {
             })
         } else {
             res.json({
-                "message": "Não existe autor para esse id"
+                "message": "Não existe author para esse id"
             })
         }
     });
 });
 
-//Cria um autor
-app.post("/api/autor", (req, res, next) => {
+//Cria um author
+app.post("/api/author", (req, res, next) => {
     var errors = []
-    if (!req.body.preco) {
+    if (!req.body.price) {
         errors.push("preço não especificado");
     }
-    if (!req.body.livro) {
-        errors.push("livro não especificado");
+    if (!req.body.book) {
+        errors.push("book não especificado");
     }
     if (errors.length) {
         res.status(400).json({ "error": errors.join(",") });
         return;
     }
     var data = {
-        nome: req.body.nome,
-        livro: req.body.livro,
-        preco: req.body.preco
+        name: req.body.name,
+        book: req.body.book,
+        price: req.body.price
     }
-    var sql = 'INSERT INTO autor (nome, livro, preco) VALUES (?,?,?)'
-    var params = [data.nome, data.livro, data.preco]
+    var sql = 'INSERT INTO author (name, book, price) VALUES (?,?,?)'
+    var params = [data.name, data.book, data.price]
     db.run(sql, params, function (err, result) {
         if (err) {
             res.status(400).json({ "error": err.message })
@@ -138,21 +138,21 @@ app.post("/api/autor", (req, res, next) => {
     });
 })
 
-//Atualiza um autor
-app.patch("/api/autor/:id", (req, res, next) => {
+//Atualiza um author
+app.patch("/api/author/:id", (req, res, next) => {
     var data = {
-        name: req.body.nome,
-        email: req.body.livro,
-        password: req.body.preco
+        name: req.body.name,
+        email: req.body.book,
+        password: req.body.price
     }
 
     db.run(
-        `UPDATE autor set 
-           nome = COALESCE(?,nome), 
-           livro = COALESCE(?,livro), 
-           preco = COALESCE(?,preco) 
+        `UPDATE author set
+           name = COALESCE(?,name),
+           book = COALESCE(?,book),
+           price = COALESCE(?,price)
            WHERE id = ?`,
-        [data.nome, data.livro, data.preco, req.params.id],
+        [data.name, data.book, data.price, req.params.id],
         function (err, result) {
             if (err) {
                 res.status(400).json({ "error": res.message })
@@ -165,10 +165,10 @@ app.patch("/api/autor/:id", (req, res, next) => {
         });
 })
 
-//Remove um autor
-app.delete("/api/autor/:id", (req, res, next) => {
+//Remove um author
+app.delete("/api/author/:id", (req, res, next) => {
     db.run(
-        'DELETE FROM autor WHERE id = ?',
+        'DELETE FROM author WHERE id = ?',
         req.params.id,
         function (err, result) {
             if (err) {

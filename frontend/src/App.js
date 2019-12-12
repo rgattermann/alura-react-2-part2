@@ -5,45 +5,43 @@ import Table from "./Table";
 import Form from "./Form";
 import Header from "./Header";
 import PopUp from "./PopUp";
+import ApiService from "./ApiService";
 
-class App extends Component{
-  state = {
-    authors: [{
-      name: 'Paulo',
-      book: 'React',
-      price: '1000'
-    },
-    {
-      name: 'Daniel',
-      book: 'Java',
-      price: '99'
-    },
-    {
-      name: 'Marcos',
-      book: 'Design',
-      price: '150'
-    },
-    {
-      name: 'Bruno',
-      book: 'DevOps',
-      price: '100'
-    },
-  ]};
+class App extends Component {
 
-  removeAuthor = index => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authors: []
+    };
+  }
+
+  removeAuthor = id => {
     const { authors } = this.state;
 
     this.setState({
-      authors: authors.filter((author, authorIndex) => authorIndex !== index)
+      authors: authors.filter((author) => author.id !== id)
     });
 
     PopUp.showMessage("success", "Autor removido com sucesso!");
+    ApiService.removeAuthor(id)
   }
 
   handleSubmit = author => {
-    this.setState({authors: [...this.state.authors, author]});
-    PopUp.showMessage("success", "Autor adicionado com sucesso!");
+    ApiService.createAuthor(JSON.stringify(author))
+      .then(res => res.data)
+      .then(author => {
+        this.setState({authors: [...this.state.authors, author]});
+        PopUp.showMessage("success", "Autor adicionado com sucesso!");
+      });
   };
+
+  componentDidMount() {
+    ApiService.AuthorsList()
+      .then(res => {
+        this.setState({authors: [...this.state.authors, ...res.data]});
+      });
+  }
 
   render() {
     return <React.Fragment>

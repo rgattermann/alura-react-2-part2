@@ -10,25 +10,25 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
       throw err
     }else{
         console.log('Connected to the SQLite database.')
-        db.run(`CREATE TABLE autor (
+        db.run(`CREATE TABLE author (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome text UNIQUE, 
-            livro text , 
-            preco INTERGER, 
-            CONSTRAINT nome_unique UNIQUE (nome)
+            name text UNIQUE,
+            book text ,
+            price INTERGER,
+            CONSTRAINT name_unique UNIQUE (name)
             )`,
         (err) => {
             if (err) {
                 // Table already created
             }else{
                 // Table just created, creating some rows
-                var insert = 'INSERT INTO autor (nome, livro, preco) VALUES (?,?,?)'
+                var insert = 'INSERT INTO author (name, book, price) VALUES (?,?,?)'
                 db.run(insert, ["Paulo Scalercio","React", 1200])
                 db.run(insert, ["Marcos","Design",800])
                 db.run(insert, ["Daniel","java",150])
                 db.run(insert, ["Nico","Aprenda Alemão",9999])
             }
-        });  
+        });
     }
 });
 

@@ -1,10 +1,10 @@
 const ApiService = {
   AuthorsList: () => {
-    return fetch("http://localhost:8000/api/autor")
+    return fetch("http://localhost:8000/api/author")
       .then(res => res.json());
   },
   createAuthor: author => {
-    return fetch("http://localhost:8000/api/autor", {
+    return fetch("http://localhost:8000/api/author", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: author,
@@ -12,11 +12,11 @@ const ApiService = {
       .then(res => res.json());
   },
   nameList: () => {
-    return fetch("http://localhost:8000/api/autor/nome")
+    return fetch("http://localhost:8000/api/author/name")
       .then(res => res.json());
   },
   bookList: () => {
-    return fetch("http://localhost:8000/api/livro")
+    return fetch("http://localhost:8000/api/author/books")
       .then(res => res.json());
   },
   removeAuthor: id => {
