@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import "materialize-css/dist/css/materialize.min.css";
-import "./App.css";
-import Table from "./Table";
-import Form from "./Form";
-import Header from "./Header";
-import PopUp from "./PopUp";
-import ApiService from "./ApiService";
+import "./Home.css";
+import Table from "../../components/Table/Table";
+import Form from "../../components/Form/Form";
+import Header from "../../components/Header/Header";
+import PopUp from "../../utils/PopUp";
+import ApiService from "../../utils/ApiService";
 
-class App extends Component {
+class Home extends Component {
 
   constructor(props) {
     super(props);
@@ -19,10 +19,9 @@ class App extends Component {
   removeAuthor = id => {
     const { authors } = this.state;
 
-    const { authorsUpdated } = authors.filter(author => author.id !== id);
+    const authorsUpdated = authors.filter(author => author.id !== id);
 
     ApiService.removeAuthor(id)
-      .then(res => ApiService.handleErrors(res))
       .then(res => {
         if (res.message === "deleted") {
           this.setState({authors: [...authorsUpdated]});
@@ -34,7 +33,6 @@ class App extends Component {
 
   handleSubmit = author => {
     ApiService.createAuthor(JSON.stringify(author))
-      .then(res => ApiService.handleErrors(res))
       .then(res => {
         if (res.message === "success") {
           this.setState({authors: [...this.state.authors, res.data]});
@@ -46,9 +44,7 @@ class App extends Component {
 
   componentDidMount() {
     ApiService.AuthorsList()
-      .then(res => ApiService.handleErrors(res))
       .then(res => {
-        console.log(res);
         if (res.message === "success") {
           this.setState({authors: [...this.state.authors, ...res.data]});
         }
@@ -70,4 +66,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Home;
